@@ -3,16 +3,16 @@
 %	[V]=centdiff(X,dtime)
 
 
-function [V]=centdiff(X,dtime)
+function [V]=centdiff(data, timeStep)
 
-if size(X,1)>size(X,2) %data in column
-  V(1,:)=(X(2,:)-X(1,:))./dtime;
-  V(2:size(X,1)-1,:)=(X(3:size(X,1),:)-X(1:size(X,1)-2,:))./(2*dtime);
-  V(size(X,1),:)=(X(size(X,1),:)-X(size(X,1)-1,:))./dtime;
-elseif size(X,1)<size(X,2) %data in row
-  V(:,1)=(X(:,2)-X(:,1))./dtime;
-  V(:,2:size(X,2)-1)=(X(:,3:size(X,2))-X(:,1:size(X,2)-2))./(2*dtime);
-  V(:,size(X,2))=(X(:,size(X,2))-X(:,size(X,2)-1))./dtime;
+if size(data,1)>size(data,2) %data in column
+  V(1,:)=(data(2,:)-data(1,:))./timeStep;
+  V(2:size(data,1)-1,:)=(data(3:size(data,1),:)-data(1:size(data,1)-2,:))./(2*timeStep);
+  V(size(data,1),:)=(data(size(data,1),:)-data(size(data,1)-1,:))./timeStep;
+elseif size(data,1)<size(data,2) %data in row
+  V(:,1)=(data(:,2)-data(:,1))./timeStep;
+  V(:,2:size(data,2)-1)=(data(:,3:size(data,2))-data(:,1:size(data,2)-2))./(2*timeStep);
+  V(:,size(data,2))=(data(:,size(data,2))-data(:,size(data,2)-1))./timeStep;
 else
   error
 end

@@ -3,10 +3,10 @@
 
 function value = normalizeAngle(value)
 
-while any(value <= -pi)
+while any(any(value <= -pi))
     value(value <= -pi) = value(value <= -pi) + 2*pi;
 end
-while value > pi
+while any(any(value > pi))
     value(value > pi) = value(value > pi) - 2*pi;
 end
     

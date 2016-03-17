@@ -2,9 +2,9 @@
 % 
 % Hendrik Reimann, 2014
 
-function [eta, xi] = filteredNoise(stream, time, timeStep, alpha, c)
+function [eta, xi] = filteredNoise(stream, totalTime, timeStep, alpha, c)
 
-time = timeStep:timeStep:time;
+time = timeStep:timeStep:totalTime;
 xi = c * 1 / sqrt(timeStep) * randn(stream, 1, length(time));
 eta = zeros(1, length(time));
 

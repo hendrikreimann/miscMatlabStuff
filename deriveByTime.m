@@ -4,6 +4,10 @@ function timeDerivative = deriveByTime(x, time)
     warning_state_old = warning('query', warning_id);
     warning('off', warning_id)
     
+    if size(x, 1) == 1 & size(x, 2) > 1
+        x = x';
+    end
+    
     if size(x, 2) > 1
         timeDerivetive = zeros(size(x));
         for i_dim = 1 : size(x, 2)

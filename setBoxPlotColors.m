@@ -1,11 +1,19 @@
-function setBoxPlotColors(axes_handle, box_plot_data, group_order, condition_list, color_list)
+function setBoxPlotColors(axes_handle, box_plot_data, group_order, condition_list, color_list, horizontal)
+    if nargin < 6
+        horizontal = false;
+    end
+    
     boxes = findobj(gca, 'Tag', 'Box');
-    box_x_positions = zeros(size(boxes));
+    box_positions = zeros(size(boxes));
     for i_box = 1 : length(boxes)
         set(box_plot_data(6, i_box), 'color', 'k')
-        box_x_positions(i_box) = mean(boxes(i_box).XData(2:3));
+        if horizontal
+            box_positions(i_box) = mean(boxes(i_box).YData(2:3));
+        else
+            box_positions(i_box) = mean(boxes(i_box).XData(2:3));
+        end
     end
-    [~, box_order] = sort(box_x_positions);
+    [~, box_order] = sort(box_positions);
 
     box_alpha = 1;
     for i_box = 1 : length(boxes)
@@ -20,7 +28,15 @@ function setBoxPlotColors(axes_handle, box_plot_data, group_order, condition_lis
         end
         
         patch_handle = patch(get(boxes(box_order(i_box)), 'XData'), get(boxes(box_order(i_box)), 'YData'), color, 'FaceAlpha', box_alpha); uistack(patch_handle, 'bottom')
-%         line_handle = plot(boxes(box_order(i_box)).XData(2:3), , 'YData'), 'k', 'linewidth', 15);
     end
     
+    line_handles = findobj(axes_handle, 'Type','Line');
+    for i_line = 1 : length(line_handles)
+        if strcmp(line_handles(i_line).Tag, 'Outliers')
+            line_handles(i_line).MarkerEdgeColor = [1; 1; 1] * 0.7;
+        end
+        if strcmp(line_handles(i_line).Tag, 'Box')
+            line_handles(i_line).Color = [1; 1; 1] * 0;
+        end
+    end
 end

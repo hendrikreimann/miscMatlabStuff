@@ -1,4 +1,4 @@
-function varargout=shadedErrorBar(x,y,errBar,lineProps,transparent)
+function varargout=shadedErrorBar(x,y,errBar,lineProps,transparent,ax)
 % function H=shadedErrorBar(x,y,errBar,lineProps,transparent)
 %
 % Purpose 
@@ -46,11 +46,11 @@ function varargout=shadedErrorBar(x,y,errBar,lineProps,transparent)
 %
 % Rob Campbell - November 2009
 
-
+% edited by Hendrik Reimann, 2017
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 % Error checking    
-error(nargchk(3,5,nargin))
+error(nargchk(3,6,nargin))
 
 
 %Process y using function handles if needed to make the error bar
@@ -93,13 +93,16 @@ if ~iscell(lineProps), lineProps={lineProps}; end
 
 if nargin<5, transparent=0; end
 
-
+if nargin<6
+    ax = gca;
+end
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-% Plot to get the parameters of the line 
-H.mainLine=plot(x,y,lineProps{:});
+% Plot to get the parameters of the line
+% H.mainLine = plot(ax, x, y, lineProps{:});
+H.mainLine = plot(x, y, lineProps{:}, 'parent', ax);
 
 
 % Work out the color of the shaded region and associated lines
@@ -112,13 +115,13 @@ col=get(H.mainLine,'color');
 edgeColor=col+(1-col)*0.55;
 patchSaturation=0.15; %How de-saturated or transparent to make patch
 if transparent
-    faceAlpha=patchSaturation;
+    faceAlpha = patchSaturation;
     patchColor=col;
-    set(gcf,'renderer','openGL')
+    set(get(ax, 'Parent'), 'renderer', 'openGL')
 else
     faceAlpha=1;
     patchColor=col+(1-col)*(1-patchSaturation);
-    set(gcf,'renderer','painters')
+    set(get(ax, 'Parent'), 'renderer', 'painters')
 end
 
     
@@ -143,16 +146,17 @@ yP(isnan(yP))=[];
 
 H.patch=patch(xP,yP,1,'facecolor',patchColor,...
               'edgecolor','none',...
-              'facealpha',faceAlpha);
+              'facealpha',faceAlpha, ...
+              'Parent', ax ...
+          );
 
 
 %Make pretty edges around the patch. 
-H.edge(1)=plot(x,lE,'-','color',edgeColor);
-H.edge(2)=plot(x,uE,'-','color',edgeColor);
+H.edge(1)=plot(x,lE,'-','color',edgeColor, 'Parent', ax);
+H.edge(2)=plot(x,uE,'-','color',edgeColor, 'Parent', ax);
 
-%Now replace the line (this avoids having to bugger about with z coordinates)
-delete(H.mainLine)
-H.mainLine=plot(x,y,lineProps{:});
+% move main line to top
+uistack(H.mainLine, 'top');
 
 
 if ~holdStatus, hold off, end

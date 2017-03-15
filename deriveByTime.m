@@ -43,7 +43,7 @@ function timeDerivative = deriveByTime(x, time)
         derivative_resampled = spline(time_resampling, derivative, time);
 
         % remove NaN entries
-        derivative_resampled(isnan(x)) = NaN;
+        derivative_resampled(isnan(x(:, i_dim))) = NaN;
 
         timeDerivative(:, i_dim) = derivative_resampled;
 

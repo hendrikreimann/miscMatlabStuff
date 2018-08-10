@@ -1,5 +1,5 @@
 function [date, subject_id, study_label, trial_id, qualifier] = extractFileParameters(fileName)
-
+warning('The output arguments are mis-named, keeping it around for now.')
 % function [subject_number, study_label, label, subject_type, day, foot, first_index, last_index] = extractFileParameters(fileName)
     underscores = find(fileName == '_' | fileName == '-'); % Location of underscores
     date = fileName(1:underscores(1)-1); % date

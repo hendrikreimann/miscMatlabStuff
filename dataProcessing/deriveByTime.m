@@ -4,6 +4,11 @@ function timeDerivative = deriveByTime(x, time)
     warning_state_old = warning('query', warning_id);
     warning('off', warning_id)
 
+    % make time a column if necessary
+    if isrow(time)
+        time = time';
+    end
+    
     if min(size(x)) == 1
         % only one variable
         if ~iscolumn(x)
